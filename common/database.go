@@ -18,6 +18,10 @@ func InitDB() *gorm.DB {
 	port := viper.GetString("datasource.port")
 	database := viper.GetString("datasource.database")
 	username := viper.GetString("datasource.username")
+	if len(os.Args) < 2 {
+		fmt.Println("请输入数据库密码")
+		return nil
+	}
 	password := os.Args[1]
 	charset := viper.GetString("datasource.charset")
 	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
