@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
 	"os"
 	"sync"
 	"time"
+
+	"github.com/spf13/viper"
 	"xietong.me/LianjiaSpider/common"
 	"xietong.me/LianjiaSpider/spider"
 )
 
-//https://cs.lianjia.com/ershoufang/ 长沙市链家网爬虫
+// https://cd.lianjia.com/ershoufang/ 长沙市链家网爬虫
 func main() {
 	//初始化配置
 	InitConfig()
@@ -18,7 +19,9 @@ func main() {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(20)
 	defer db.Close()
-	district := [9]string{"yuhua", "yuelu", "tianxin", "kaifu", "furong", "wangcheng", "ningxiang", "liuyang", "changshaxian"}
+	district := []string{"jinjiang", "qingyang", "wuhou", "gaoxin7", "chenghua", "jinniu", "tianfuxinqu",
+		"gaoxinxi1", "shangliu", "wenjiang", "pidou", "longquanyi", "xindou", "tianfuxinqunanqu", "qingbaijiang",
+		"doujiangyan", "pengzhou", "jianyang", "xinjin", "chongzhou1", "dayi", "jintang", "pujiang", "qionglai"}
 	var wgSelling sync.WaitGroup
 	var wgSold sync.WaitGroup
 	//通过循环来爬取不同地区，同时获取不同地区的总分页数来爬取不同页面的数据
@@ -51,7 +54,7 @@ func main() {
 	wgSold.Wait()
 }
 
-//初始化配置函数
+// 初始化配置函数
 func InitConfig() {
 	workDir, _ := os.Getwd()
 	viper.SetConfigName("application")

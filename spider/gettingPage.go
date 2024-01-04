@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-//定义page结构体用来处理json
+// 定义page结构体用来处理json
 type Page struct {
 	TotalPage int `json:"totalPage"`
 	CurPage   int `json:"curPage"`
@@ -23,7 +23,7 @@ func GetSellingPageSpider(db *gorm.DB, districtName string) int {
 		colly.UserAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"),
 	)
 	c.SetRequestTimeout(time.Duration(35) * time.Second)
-	c.Limit(&colly.LimitRule{DomainGlob: "https://cs.lianjia.com/ershoufang", Parallelism: 1}) //Parallelism代表最大并发数
+	c.Limit(&colly.LimitRule{DomainGlob: "https://cd.lianjia.com/ershoufang", Parallelism: 1}) //Parallelism代表最大并发数
 	c.OnRequest(func(r *colly.Request) {
 		log.Println("Visiting", r.URL)
 	})
@@ -41,9 +41,9 @@ func GetSellingPageSpider(db *gorm.DB, districtName string) int {
 	})
 	c.OnError(func(_ *colly.Response, err error) {
 		fmt.Println("Something went wrong:", err)
-		c.Visit("https://cs.lianjia.com/ershoufang/" + districtName)
+		c.Visit("https://cd.lianjia.com/ershoufang/" + districtName)
 	})
-	c.Visit("https://cs.lianjia.com/ershoufang/" + districtName)
+	c.Visit("https://cd.lianjia.com/ershoufang/" + districtName)
 	c.Wait()
 	return totalPage
 }
@@ -55,7 +55,7 @@ func GetSoldPageSpider(db *gorm.DB, districtName string) int {
 		colly.UserAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"),
 	)
 	c.SetRequestTimeout(time.Duration(90) * time.Second)
-	c.Limit(&colly.LimitRule{DomainGlob: "https://cs.lianjia.com/chengjiao", Parallelism: 1}) //Parallelism代表最大并发数
+	c.Limit(&colly.LimitRule{DomainGlob: "https://cd.lianjia.com/chengjiao", Parallelism: 1}) //Parallelism代表最大并发数
 	c.OnRequest(func(r *colly.Request) {
 		log.Println("Visiting", r.URL)
 	})
@@ -73,9 +73,9 @@ func GetSoldPageSpider(db *gorm.DB, districtName string) int {
 	})
 	c.OnError(func(_ *colly.Response, err error) {
 		fmt.Println("Something went wrong:", err)
-		c.Visit("https://cs.lianjia.com/chengjiao/" + districtName)
+		c.Visit("https://cd.lianjia.com/chengjiao/" + districtName)
 	})
-	c.Visit("https://cs.lianjia.com/chengjiao/" + districtName)
+	c.Visit("https://cd.lianjia.com/chengjiao/" + districtName)
 	c.Wait()
 	return totalPage
 }

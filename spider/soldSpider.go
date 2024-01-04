@@ -19,7 +19,7 @@ func GetSoldInfoSpider(db *gorm.DB, districtName string, page int) {
 		colly.UserAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"),
 	)
 	c.SetRequestTimeout(time.Duration(120) * time.Second)
-	c.Limit(&colly.LimitRule{DomainGlob: "https://cs.lianjia.com/chengjiao", Parallelism: 1}) //Parallelism代表最大并发数
+	c.Limit(&colly.LimitRule{DomainGlob: "https://cd.lianjia.com/chengjiao", Parallelism: 1}) //Parallelism代表最大并发数
 	c.OnRequest(func(r *colly.Request) {
 		log.Println("Visiting", r.URL)
 	})
@@ -44,7 +44,7 @@ func GetSoldInfoSpider(db *gorm.DB, districtName string, page int) {
 			fmt.Println("start save", houseId, page)
 			soldInfo := model.Sold{Id: houseId, Name: name, TotalPrice: totalPrice, UnitPrice: unitPrice, District: districtName, SoldYear: soldYear, SoldMonth: soldMonth, Area: area}
 			err := db.Save(&soldInfo).Error
-			for ; err != nil; {
+			for err != nil {
 				soldInfo := model.Sold{Id: houseId, Name: name, TotalPrice: totalPrice, UnitPrice: unitPrice, District: districtName, SoldYear: soldYear, SoldMonth: soldMonth, Area: area}
 				err = db.Save(&soldInfo).Error
 			}
@@ -52,9 +52,9 @@ func GetSoldInfoSpider(db *gorm.DB, districtName string, page int) {
 	})
 	c.OnError(func(_ *colly.Response, err error) {
 		fmt.Println("Something went wrong:", err)
-		c.Visit("https://cs.lianjia.com/chengjiao/" + districtName + "/pg" + strconv.Itoa(page))
+		c.Visit("https://cd.lianjia.com/chengjiao/" + districtName + "/pg" + strconv.Itoa(page))
 	})
-	c.Visit("https://cs.lianjia.com/chengjiao/" + districtName + "/pg" + strconv.Itoa(page))
+	c.Visit("https://cd.lianjia.com/chengjiao/" + districtName + "/pg" + strconv.Itoa(page))
 	c.Wait()
 
 }
