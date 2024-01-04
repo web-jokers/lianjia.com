@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
+	"os"
 	"xietong.me/LianjiaSpider/model"
 )
 
@@ -17,7 +18,7 @@ func InitDB() *gorm.DB {
 	port := viper.GetString("datasource.port")
 	database := viper.GetString("datasource.database")
 	username := viper.GetString("datasource.username")
-	password := viper.GetString("datasource.password")
+	password := os.Args[1]
 	charset := viper.GetString("datasource.charset")
 	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
 		username,
