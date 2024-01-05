@@ -23,9 +23,9 @@ func GetSellingInfoSpider(db *gorm.DB, districtName string, page int) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Println("Visiting", r.URL)
 	})
-	c.OnError(func(_ *colly.Response, err error) {
-		log.Println("Something went wrong:", err)
-	})
+	//c.OnError(func(_ *colly.Response, err error) {
+	//	log.Println("Something went wrong:", err)
+	//})
 	//访问所有info 访问前20页采用goroutine
 	c.OnHTML(".sellListContent>li", func(e *colly.HTMLElement) {
 		re, _ := regexp.Compile(`\d+`)                                                                                                    //正则表达式用来匹配数字
@@ -37,7 +37,7 @@ func GetSellingInfoSpider(db *gorm.DB, districtName string, page int) {
 		unitPrice, _ := strconv.Atoi(string(re.Find([]byte(e.DOM.Find(".info .priceInfo .unitPrice span").Eq(0).Text()))))                //读取页面元素获取单价,正则匹配单价的数字，转换成int类型
 		area, _ := strconv.Atoi(string(re.Find([]byte(strings.Split(e.ChildText("div.info > div.address > div.houseInfo "), " | ")[1])))) // //读取页面元素获取面积,正则匹配单价的数字，转换成int类型
 		if houseId != "" {
-			fmt.Println("start save", houseId, page)
+			//fmt.Println("start save", houseId, page)
 			sellingInfo := model.Selling{Id: houseId, Name: name, TotalPrice: totalPrice, UnitPrice: unitPrice, District: districtName, Region: region, Area: area}
 			err := db.Save(&sellingInfo).Error
 			for err != nil {
@@ -47,7 +47,7 @@ func GetSellingInfoSpider(db *gorm.DB, districtName string, page int) {
 		}
 	})
 	c.OnError(func(_ *colly.Response, err error) {
-		fmt.Println("Something went wrong:", err)
+		fmt.Println("[Error] Something went wrong:", err)
 		c.Visit("https://cd.lianjia.com/ershoufang/" + districtName + "/pg" + strconv.Itoa(page))
 	})
 	c.Visit("https://cd.lianjia.com/ershoufang/" + districtName + "/pg" + strconv.Itoa(page))

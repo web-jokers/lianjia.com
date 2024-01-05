@@ -23,7 +23,7 @@ func main() {
 		"gaoxinxi1", "shangliu", "wenjiang", "pidou", "longquanyi", "xindou", "tianfuxinqunanqu", "qingbaijiang",
 		"doujiangyan", "pengzhou", "jianyang", "xinjin", "chongzhou1", "dayi", "jintang", "pujiang", "qionglai"}
 	sellingQueue := make(chan interface{}, 10)
-	soldQueue := make(chan interface{}, 10)
+	soldQueue := make(chan interface{}, 2)
 	go func() {
 		for {
 			sellingQueue <- struct{}{}
@@ -35,7 +35,7 @@ func main() {
 				totalSellingPage := spider.GetSellingPageSpider(db, districtName)
 				for page := 1; page < totalSellingPage; page++ {
 					time.Sleep(time.Duration(page) * time.Millisecond)
-					fmt.Println("start spider", page)
+					//fmt.Println("start spider", page)
 					spider.GetSellingInfoSpider(db, districtName, page)
 				}
 			}()
